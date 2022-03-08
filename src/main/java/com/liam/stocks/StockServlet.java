@@ -4,8 +4,20 @@
  */
 package com.liam.stocks;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author benray
  */
-public class NewServlet extends HttpServlet {
+public class StockServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,7 +43,7 @@ public class NewServlet extends HttpServlet {
             throws ServletException, IOException {
         String stockname = request.getParameter("name");
        // String price = request.getParameter("price");
-       // int parameter = Integer.parseInt(price);
+       // int priceInt = Integer.parseInt(price);
         
         
         response.setContentType("text/html;charset=UTF-8");
@@ -40,16 +52,16 @@ public class NewServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");            
+            out.println("<title>Servlet NewServlet55</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewServlet at." + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewServle." + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
               StockBean eObj = new StockBean();
        
-        eObj.setPrice(34);
-        eObj.setStockname(stockname);
+        eObj.setPrice( getWebService() );
+       eObj.setStockname(stockname);
        
  
         eObj.getPrice();
@@ -57,9 +69,9 @@ public class NewServlet extends HttpServlet {
         /**** Storing Bean In Session ****/
         request.getSession().setAttribute("emp", eObj);
  
-       // RequestDispatcher rd = request.getRequestDispatcher("/Stock.jsp");
-        //rd.forward(request, response);
-           // response.sendRedirect("./Stock.jsp");
+       RequestDispatcher rd = request.getRequestDispatcher("Stock.jsp");
+       rd.forward(request, response);
+          
         }
     }
 
@@ -103,9 +115,34 @@ public class NewServlet extends HttpServlet {
     }// </editor-fold>
     
     
-    public int getWebService() {
-        //https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo
-        return 5;
+    public int getWebService() throws IOException {
+        String key = "4VXR79BQJX7LYJ80";
+        String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=" + key;
+        
+        
+        
+        
+         HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response;
+         ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            
+            response.body();
+            System.out.println(response.body());
+           
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StockServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //TODO get stock quote from API
+       
+        return 45;
     }
 
 }

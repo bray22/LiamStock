@@ -16,7 +16,7 @@
     </head>
     <body>
         <h1>Stock Details</h1>
-        Name: ${emp.stockname}<br/>
+        Name: ${StockBean.stockname}<br/>
         Price: ${emp.price}
     </body>
 </html>

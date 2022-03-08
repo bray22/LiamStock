@@ -21,7 +21,7 @@ public class StockBean {
     }
     public int setPrice(int price) {
         this.price = price;
-        return 12;
+        return price;
     }
     public String getStockname() {
         return stockname;

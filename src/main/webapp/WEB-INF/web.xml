@@ -4,8 +4,16 @@
         <servlet-name>NewServlet</servlet-name>
         <servlet-class>com.liam.stocks.NewServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StockServlet</servlet-name>
+        <servlet-class>com.liam.stocks.StockServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StockServlet</servlet-name>
         <url-pattern>/Stock</url-pattern>
     </servlet-mapping>
     <session-config>
